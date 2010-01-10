@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+
+{% block title %}{{ super }} - {{ flatpage.title|title }}{% endblock %}
+
+{% if flatpage.extra_css %}
+{% block extra_css %}
+{{ flatpage.extra_css }}
+{% endblock %}
+{% endif %}
+
+{% if flatpage.extra_js %}
+{% block extra_js %}
+{{ flatpage.extra_js }}
+{% endblock %}
+{% endif %}
+
+{% block content %}
+    {% load markup %}
+    <h2>{{ flatpage.title|title }}</h2>
+    
+    <div class="section flatpage">
+        {% ifequal flatpage.content_format 'rst' %}
+            {{ flatpage.content|restructuredtext }}
+        {% endifequal %}
+        {% ifequal flatpage.content_format 'txt' %}
+            {{ flatpage.content|linebreaks }}
+        {% endifequal %}
+        {% ifequal flatpage.content_format 'html' %}
+            {{ flatpage.content|safe }}
+        {% endifequal %}
+    </div>
+{% endblock %}
+
+{% block content_footer %}
+    Last modified on {{ flatpage.modified|date:"F j, Y @ g:i:s a" }} by {{ flatpage.user.username }}.
+{% endblock %}
